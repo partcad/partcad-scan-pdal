@@ -1,0 +1,51 @@
+# Point clouds in every format PDAL reads, as PartCAD parts.
+#
+# Both types run in the image below, which carries PDAL (conda-forge's build)
+# and the code that reads with it: a machine needs a container runtime, and
+# nothing else, to build these parts. See README.md.
+desc: Point clouds in every format PDAL reads - PCD, PTX, BPF, Draco, EPT and COPC among them - made solids.
+url: https://github.com/partcad/partcad-scan-pdal
+partcad: ">=0.10.24"
+
+partTypes:
+  scan:
+    desc: |
+      A point cloud in a file PDAL reads - Point Cloud Library's `.pcd`,
+      Leica's `.ptx`, `.bpf`, Optech's `.csd`, an SLPK, a Draco cloud, an E57
+      scan, a local EPT (`ept.json`) or COPC (`.copc.laz`) - made a solid as
+      PartCAD's `pointcloud` makes one: a height field of the points binned on
+      the plan (`as: heightfield`, the default; `classes: 2` keeps a lidar
+      survey's ground), or the voxels they fall in (`as: voxels`), in their
+      colours. `bounds` reads part of it, `reader` names the PDAL reader where
+      the file's name does not.
+    path: scan.py
+    extension: pcd
+    requireSolid: true
+    container:
+      # Pinned: a part is cached against this tag. VERSION says which one
+      # this repository builds, and a test holds the two together.
+      image: ghcr.io/partcad/partcad-scan-pdal:0.1.0
+      name: pdal
+  stream:
+    desc: |
+      A region of a survey too large to read whole, read over the network: an
+      Entwine Point Tiles (`.../ept.json`) or Cloud Optimized Point Cloud
+      (`.copc.laz`) at its URL, in `source`, read in `bounds` (west south east
+      north, in the survey's reference system), at `resolution`, or both -
+      USGS 3DEP publishes the United States as EPT. Made a solid as a `scan`
+      is.
+    path: scan.py
+    requireSolid: true
+    container:
+      image: ghcr.io/partcad/partcad-scan-pdal:0.1.0
+      name: pdal
+
+parts:
+  sample:
+    type: ":scan"
+    desc: A dome, sampled as a scanner would sample it, read from Point Cloud Library's format.
+    path: sample.pcd
+    parameters:
+      unit:
+        type: string
+        default: m
