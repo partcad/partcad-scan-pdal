@@ -304,7 +304,9 @@ def test_the_environment_pdal_runs_in_is_its_conda_environment(tmp_path, monkeyp
         (prefix / relative).mkdir(parents=True)
     program = prefix / "bin" / "pdal"
     program.write_text("")
+    # The image sets all three: what is not set is what is worked out.
     monkeypatch.delenv("PDAL_DRIVER_PATH", raising=False)
+    monkeypatch.delenv("GDAL_DATA", raising=False)
     monkeypatch.setenv("PROJ_DATA", "/somewhere/else")
 
     env = pdal_cloud.environment(str(program))
