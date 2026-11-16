@@ -24,7 +24,7 @@ partTypes:
     container:
       # Pinned: a part is cached against this tag. VERSION says which one
       # this repository builds, and a test holds the two together.
-      image: ghcr.io/partcad/partcad-scan-pdal:0.1.0
+      image: ghcr.io/partcad/partcad-scan-pdal:0.1.1
       name: pdal
   stream:
     desc: |
@@ -37,7 +37,7 @@ partTypes:
     path: scan.py
     requireSolid: true
     container:
-      image: ghcr.io/partcad/partcad-scan-pdal:0.1.0
+      image: ghcr.io/partcad/partcad-scan-pdal:0.1.1
       name: pdal
 
 parts:

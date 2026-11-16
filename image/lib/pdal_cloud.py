@@ -308,7 +308,8 @@ def run(request):
     # it, by its own reader, and what it reads is handed over instead.
     # Put back afterwards, so that nothing else in the process reads by PDAL.
     builtin = part_pointcloud.read
-    part_pointcloud.read = lambda path: read(path, parameters)
+    # 'limit' is 'maxPoints', which the pipeline thins by already.
+    part_pointcloud.read = lambda path, limit=None: read(path, parameters)
     try:
         return part_pointcloud.run(request)
     finally:
